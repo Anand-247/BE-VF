@@ -22,7 +22,7 @@ const app = express()
 app.use(helmet())
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: "*",
     credentials: true,
   }),
 )
@@ -50,6 +50,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 // Routes
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the Wooden Furniture API" })
+});
 app.use("/api/auth", authRoutes)
 app.use("/api/categories", categoryRoutes)
 app.use("/api/products", productRoutes)
