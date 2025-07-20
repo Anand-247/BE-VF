@@ -6,15 +6,39 @@ const { upload, uploadToCloudinary, deleteFromCloudinary } = require("../config/
 
 const router = express.Router()
 
-// Get all categories (public)
+// Get all categories with product count (public)
 router.get("/", async (req, res) => {
   try {
-    const categories = await Category.find({ isActive: true }).sort({ sortOrder: 1, name: 1 })
-    res.json(categories)
+    const categoriesWithCount = await Category.aggregate([
+      { $match: { isActive: true } },
+      {
+        $lookup: {
+          from: "products", // collection name in MongoDB (case-sensitive!)
+          localField: "_id",
+          foreignField: "category",
+          as: "products",
+        },
+      },
+      {
+        $addFields: {
+          productCount: { $size: "$products" },
+        },
+      },
+      {
+        $project: {
+          products: 0, // hide product array
+        },
+      },
+      { $sort: { sortOrder: 1, name: 1 } },
+    ])
+
+    res.json(categoriesWithCount)
   } catch (error) {
+    console.error(error)
     res.status(500).json({ message: "Server error" })
   }
 })
+
 
 // Get category by slug (public)
 router.get("/:slug", async (req, res) => {
@@ -69,7 +93,6 @@ router.post(
           publicId: result.public_id,
         }
       }
-      console.log("Category data: >>>>>>>>>>>>>>>>>", categoryData)
 
       const category = new Category(categoryData)
       await category.save()
