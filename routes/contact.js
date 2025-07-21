@@ -122,7 +122,7 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(404).json({ message: "Contact message not found" })
     }
 
-    res.json({ message: "Contact message deleted successfully" })
+    res.json({ success: true, message: "Contact message deleted successfully" })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server error" })

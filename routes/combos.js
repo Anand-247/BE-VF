@@ -52,7 +52,7 @@ router.post(
         const result = await uploadToCloudinary(req.file.buffer, "combos")
         comboData.image = {
           url: result.secure_url,
-          publicId: result.public_id,
+          publicId: result.public_id,w
         }
       }
 
