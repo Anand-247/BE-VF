@@ -34,7 +34,7 @@ router.post("/", auth, upload.single("image"), [body("title").notEmpty().trim()]
         publicId: result.public_id,
       }
     }
-
+    
     const banner = new Banner(bannerData)
     await banner.save()
 
@@ -97,7 +97,7 @@ router.delete("/:id", auth, async (req, res) => {
     }
 
     await Banner.findByIdAndDelete(req.params.id)
-    res.json({ message: "Banner deleted successfully" })
+    res.json({ success: true, message: "Banner deleted successfully" })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server error" })

@@ -102,7 +102,7 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-
+      
       const productData = { ...req.body }
 
       // Parse JSON fields
@@ -115,7 +115,7 @@ router.post(
       if (req.body.offers) {
         productData.offers = JSON.parse(req.body.offers)
       }
-
+      
       // Upload images
       if (req.files && req.files.length > 0) {
         const imagePromises = req.files.map((file) => uploadToCloudinary(file.buffer, "products"))
@@ -233,7 +233,7 @@ router.delete("/:id", auth, async (req, res) => {
     }
 
     await Product.findByIdAndDelete(req.params.id)
-    res.json({ message: "Product deleted successfully" })
+    res.json({ success: true, message: "Product deleted successfully" })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server error" })

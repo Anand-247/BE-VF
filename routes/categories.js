@@ -158,7 +158,7 @@ router.delete("/:id", auth, async (req, res) => {
     }
 
     await Category.findByIdAndDelete(req.params.id)
-    res.json({ message: "Category deleted successfully" })
+    res.json({ success: true,   message: "Category deleted successfully" })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server error" })
